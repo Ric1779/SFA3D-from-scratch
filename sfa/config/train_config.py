@@ -65,8 +65,10 @@ def parse_train_configs():
                         help='number of nodes for distributed training')
     parser.add_argument('--rank', default=-1, type=int, metavar='N',
                         help='node rank for distributed training')
-    parser.add_argument('--dist-url', default='tcp://127.0.0.1:29500', type=str,
+    parser.add_argument('--dist_url', default='tcp://127.0.0.1:29500', type=str,
                         help='url used to set up distributed training')
+    parser.add_argument('--dist_backend', default='nccl', type=str,
+                        help='distributed backend')
     parser.add_argument('--gpu_idx', default=None, type=int,
                         help='GPU index to use.')
     parser.add_argument('--no_cuda', action='store_true',
