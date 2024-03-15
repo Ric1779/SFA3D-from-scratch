@@ -44,7 +44,8 @@ boundary_back = {
 
 BEV_WIDTH = 608  # across y axis -25m ~ 25m
 BEV_HEIGHT = 608  # across x axis 0m ~ 50m
-DISCRETIZATION = (boundary["maxX"] - boundary["minX"]) / BEV_HEIGHT
+DISCRETIZATION_HEIGHT = (boundary["maxX"] - boundary["minX"]) / BEV_HEIGHT
+DISCRETIZATION_WIDTH = (boundary["maxY"] - boundary["minY"]) / BEV_WIDTH
 
 # maximum number of points per voxel
 T = 35
@@ -67,9 +68,8 @@ Tr_velo_to_cam = np.array([
     [9.99882833e-01, 7.49141178e-03, 1.18719929e-02, -2.78557062e-01],
     [0, 0, 0, 1]
 ])
-
-# cal mean from train set
-# Rectification Matrix
+ 
+# Rectification Matrix (calculated as the mean from train set)
 R0 = np.array([
     [0.99992475, 0.00975976, -0.00734152, 0],
     [-0.0097913, 0.99994262, -0.00430371, 0],
@@ -77,7 +77,7 @@ R0 = np.array([
     [0, 0, 0, 1]
 ])
 
-# Projection Matrix
+# Projection Matrix to the rectified coordinate system of image2 or the left image, 2 because it's the color image
 P2 = np.array([[719.787081, 0., 608.463003, 44.9538775],
                [0., 719.787081, 174.545111, 0.1066855],
                [0., 0., 1., 3.0106472e-03],

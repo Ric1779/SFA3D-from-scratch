@@ -29,7 +29,7 @@ def parse_train_configs():
                         help='Take a subset of the dataset to run and debug')
     parser.add_argument('--num_workers', type=int, default=4,
                         help='Number of threads for loading data')
-    parser.add_argument('--batch_size', type=int, default=16,
+    parser.add_argument('--batch_size', type=int, default=1,
                         help='mini-batch size (default: 16), this is the total'
                              'batch size of all GPUs on the current node when using'
                              'Data Parallel or Distributed Data Parallel')
@@ -43,7 +43,7 @@ def parse_train_configs():
     ##############     Training strategy            ####################
     parser.add_argument('--start_epoch', type=int, default=1, metavar='N',
                         help='the starting epoch')
-    parser.add_argument('--num_epochs', type=int, default=300, metavar='N',
+    parser.add_argument('--num_epochs', type=int, default=3, metavar='N',
                         help='number of total epochs to run')
     parser.add_argument('--lr_type', type=str, default='cosin',
                         help='the type of learning rate scheduler (cosin or multi_step or one_cycle)')
@@ -69,7 +69,7 @@ def parse_train_configs():
                         help='url used to set up distributed training')
     parser.add_argument('--dist_backend', default='nccl', type=str,
                         help='distributed backend')
-    parser.add_argument('--gpu_idx', default=None, type=int,
+    parser.add_argument('--gpu_idx', default=0, type=int,
                         help='GPU index to use.')
     parser.add_argument('--no_cuda', action='store_true',
                         help='If true, cuda is not used.')

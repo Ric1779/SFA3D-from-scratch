@@ -210,7 +210,6 @@ class KittiDataset(Dataset):
             gen_hm_radius(hm_main_center[cls_id], center, radius)
             # Index of the center
             indices_center[k] = center_int[1] * hm_w + center_int[0]
-
             # targets for center offset
             cen_offset[k] = center - center_int
 
@@ -258,7 +257,6 @@ class KittiDataset(Dataset):
 
         lidarData, labels = get_filtered_lidar(lidarData, cnf.boundary, labels)
         bev_map = makeBEVMap(lidarData, cnf.boundary)
-
         return bev_map, labels, img_rgb, img_path
 
 
@@ -291,15 +289,14 @@ if __name__ == '__main__':
         bev_map, labels, img_rgb, img_path = dataset.draw_img_with_label(idx)
         calib = Calibration(img_path.replace(".png", ".txt").replace("image_2", "calib"))
         bev_map = (bev_map.transpose(1, 2, 0) * 255).astype(np.uint8)
-        bev_map = cv2.resize(bev_map, (cnf.BEV_HEIGHT, cnf.BEV_WIDTH))
-
+        bev_map = cv2.resize(bev_map, (cnf.BEV_WIDTH, cnf.BEV_HEIGHT))
         for box_idx, (cls_id, x, y, z, h, w, l, yaw) in enumerate(labels):
             # Draw rotated box
             yaw = -yaw
-            y1 = int((x - cnf.boundary['minX']) / cnf.DISCRETIZATION)
-            x1 = int((y - cnf.boundary['minY']) / cnf.DISCRETIZATION)
-            w1 = int(w / cnf.DISCRETIZATION)
-            l1 = int(l / cnf.DISCRETIZATION)
+            y1 = int((x - cnf.boundary['minX']) / cnf.DISCRETIZATION_HEIGHT)
+            x1 = int((y - cnf.boundary['minY']) / cnf.DISCRETIZATION_WIDTH)
+            w1 = int(w / cnf.DISCRETIZATION_WIDTH)
+            l1 = int(l / cnf.DISCRETIZATION_HEIGHT)
 
             drawRotatedBox(bev_map, x1, y1, w1, l1, yaw, cnf.colors[int(cls_id)])
         # Rotate the bev_map
@@ -311,6 +308,6 @@ if __name__ == '__main__':
 
         out_img = merge_rgb_to_bev(img_rgb, bev_map, output_width=configs.output_width)
         cv2.imshow('bev_map', out_img)
-
+        cv2.imwrite("output.png", out_img)
         if cv2.waitKey(0) & 0xff == 27:
             break

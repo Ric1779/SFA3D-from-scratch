@@ -81,7 +81,7 @@ def draw_box_3d_v2(image, qs, color=(255, 0, 255), thickness=2):
 
 def draw_box_3d(image, corners, color=(0, 0, 255)):
     ''' Draw 3d bounding box in image
-        corners: (8,3) array of vertices for the 3d box in following order:
+        corners (projected on the rectified image plane): (8,3) array of vertices for the 3d box in following order:
             1 -------- 0
            /|         /|
           2 -------- 3 .
@@ -111,6 +111,7 @@ def draw_box_3d(image, corners, color=(0, 0, 255)):
 
 
 def show_rgb_image_with_boxes(img, labels, calib):
+    # labels are in rectified camera coord
     for box_idx, label in enumerate(labels):
         cls_id, location, dim, ry = label[0], label[1:4], label[4:7], label[7]
         if location[2] < 2.0:  # The object is too close to the camera, ignore it during visualization
@@ -135,7 +136,7 @@ def merge_rgb_to_bev(img_rgb, img_bev, output_width):
     output_bev_h = int(ratio_bev * img_bev_h)
 
     ret_img_bev = cv2.resize(img_bev, (output_width, output_bev_h))
-
+    
     out_img = np.zeros((output_rgb_h + output_bev_h, output_width, 3), dtype=np.uint8)
     # Upper: RGB --> BEV
     out_img[:output_rgb_h, ...] = ret_img_rgb
