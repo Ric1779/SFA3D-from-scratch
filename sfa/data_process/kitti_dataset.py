@@ -305,9 +305,10 @@ if __name__ == '__main__':
         labels[:, 1:] = lidar_to_camera_box(labels[:, 1:], calib.V2C, calib.R0, calib.P2)
         img_rgb = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2BGR)
         img_rgb = show_rgb_image_with_boxes(img_rgb, labels, calib)
-
+        #cv2.imwrite(f'rgb_image{idx}.png', img_rgb)
+        #cv2.imwrite(f'bev_image{idx}.png', bev_map)
         out_img = merge_rgb_to_bev(img_rgb, bev_map, output_width=configs.output_width)
         cv2.imshow('bev_map', out_img)
-        cv2.imwrite("output.png", out_img)
+        #cv2.imwrite(f"output{idx}.png", out_img)
         if cv2.waitKey(0) & 0xff == 27:
             break
